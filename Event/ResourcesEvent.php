@@ -2,8 +2,9 @@
 namespace Acilia\Bundle\TranslationBundle\Event;
 
 use Acilia\Bundle\TranslationBundle\Event\ResourceEvent;
+use Symfony\Component\EventDispatcher\Event;
 
-class ResourcesEvent
+class ResourcesEvent extends Event
 {
     /**
      * @var array

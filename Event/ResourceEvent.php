@@ -1,7 +1,9 @@
 <?php
 namespace Acilia\Bundle\TranslationBundle\Event;
 
-class ResourceEvent
+use Symfony\Component\EventDispatcher\Event;
+
+class ResourceEvent extends Event
 {
     const EVENT_WARMUP = 'translation.warmup';
     const EVENT_LOAD = 'translation.load';
