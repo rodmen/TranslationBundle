@@ -2,6 +2,7 @@
 namespace Acilia\Bundle\TranslationBundle\Library\Translation;
 
 use Acilia\Bundle\TranslationBundle\Event\ResourceEvent;
+use Acilia\Bundle\TranslationBundle\Event\ResourcesEvent;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class CacheWarmer implements CacheWarmerInterface
