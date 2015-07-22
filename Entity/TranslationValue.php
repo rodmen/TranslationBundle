@@ -37,13 +37,11 @@ class TranslationValue
     protected $translation;
 
     /**
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="value_created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
 
     /**
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="value_modified_at", type="datetime", nullable=false)
      */
     protected $modifiedAt;
@@ -64,7 +62,7 @@ class TranslationValue
     {
         $this->modifiedAt = new \DateTime();
     }
-    
+
     /**
      * Get id
      *
