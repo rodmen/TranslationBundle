@@ -2,13 +2,13 @@
 namespace Acilia\Bundle\TranslationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="translation_value", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unq_translation_value", columns={"value_resource", "value_attribute"})}
  * )
+ * @ORM\HasLifecycleCallbacks()
  */
 
 class TranslationValue
@@ -48,6 +48,23 @@ class TranslationValue
      */
     protected $modifiedAt;
 
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+        $this->modifiedAt = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setModifiedAtValue()
+    {
+        $this->modifiedAt = new \DateTime();
+    }
+    
     /**
      * Get id
      *
