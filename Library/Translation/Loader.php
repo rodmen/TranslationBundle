@@ -34,7 +34,7 @@ class Loader
                 $nodesStmt->execute();
 
             } else {
-                $nodesSql = 'SELECT N.node_name, N.node_type, A.attrib_name, A.attrib_original, V.value_translation FROM translation_node N INNER JOIN translation_attribute A ON N.node_id=A.attrib_node LEFT JOIN translation_value V ON A.attrib_id = V.value_attribute WHERE V.value_resource = :resource';
+                $nodesSql = 'SELECT N.node_name, N.node_type, A.attrib_name, A.attrib_original, V.value_translation FROM translation_node N INNER JOIN translation_attribute A ON N.node_id=A.attrib_node LEFT JOIN translation_value V ON A.attrib_id = V.value_attribute WHERE (V.value_resource = :resource OR V.value_resource IS NULL)';
                 $nodesStmt = $this->doctrine->getManager()->getConnection()->prepare($nodesSql);
                 $nodesStmt->execute(['resource' => $resource]);
             }
