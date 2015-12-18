@@ -31,13 +31,4 @@ class Translator extends BaseTranslator
             }
         }
     }
-
-    public function setLocale($locale)
-    {
-        if ($locale != '' && !isset($this->catalogues[$locale])) {
-            $locale = 'en';
-        }
-
-        parent::setLocale($locale);
-    }
 }
