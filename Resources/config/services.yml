@@ -5,11 +5,11 @@ services:
     # Translation Loader
     acilia.translation.loader:
         class: Acilia\Bundle\TranslationBundle\Library\Translation\Loader
-        arguments: [%kernel.cache_dir%, @doctrine, @logger, %kernel.debug%]
+        arguments: [%kernel.cache_dir%, "@doctrine", "@logger", %kernel.debug%]
 
    # Translations Cache Warmer
     acilia.translation.cache_warmer:
         class: Acilia\Bundle\TranslationBundle\Library\Translation\CacheWarmer
-        arguments: [@event_dispatcher, @acilia.translation.loader]
+        arguments: ["@event_dispatcher", "@acilia.translation.loader"]
         tags:
             - { name: kernel.cache_warmer }
