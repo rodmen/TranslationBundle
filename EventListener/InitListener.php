@@ -30,18 +30,18 @@ class InitListener
 
         // initialize default translation
         $catalog = $this->loader->load(null, 'en', 0);
+        $this->translator->setFallbackLocales([]);
         foreach ($catalog->getDomains() as $domain) {
             $this->translator->addResource('array', $catalog->all($domain), $catalog->getLocale(), $domain);
-            $this->translator->setFallbackLocales([]);
         }
 
         // Init each locale
+        $this->translator->setFallbackLocales(['en']);
         if (count($resourcesEvent) > 0) {
             foreach($resourcesEvent->getResources() as $resourceEvent) {
                 $catalog = $this->loader->load($resourceEvent->getResource(), $resourceEvent->getCulture(), $resourceEvent->getVersion());
                 foreach ($catalog->getDomains() as $domain) {
                     $this->translator->addResource('array', $catalog->all($domain), $catalog->getLocale(), $domain);
-                    $this->translator->setFallbackLocales([]);
                 }
             }
         }
