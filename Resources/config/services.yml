@@ -1,7 +1,11 @@
-parameters:
-    translator.class: Acilia\Bundle\TranslationBundle\Library\Translation\Translator
-
 services:
+    # Init Listener
+    acilia.translation.listener.init:
+        class: Acilia\Bundle\TranslationBundle\EventListener\InitListener
+        arguments: ["@acilia.translation.loader", "@event_dispatcher", "@translator.default"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onRequest, priority: 2 }
+
     # Translation Loader
     acilia.translation.loader:
         class: Acilia\Bundle\TranslationBundle\Library\Translation\Loader
