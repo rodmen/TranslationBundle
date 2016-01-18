@@ -2,6 +2,9 @@
 namespace Acilia\Bundle\TranslationBundle\Library\Translation;
 
 use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Exception;
 
 class Loader
 {
@@ -26,8 +29,16 @@ class Loader
         $cacheFile = $this->cacheDir . '/translations/resource-' . ($resource === null ? 'global' : $resource) . '-' . $culture . '-v' . $version . '.php';
 
         if (!file_exists($cacheFile) || ((filemtime($cacheFile) + (self::TTL * 3600)) < time())) {
-            $catalogue = new MessageCatalogue($culture);
+            try {
+                // Delete Symfony Catalogue
+                $fs = new Filesystem();
+                $finder = new Finder();
+                $sfCacheFiles = $finder->in($this->cacheDir . '/translations/')->name('catalogue.' . $culture. '.*');
+                $fs->remove($sfCacheFiles);
+            } catch (Exception $e) {
+            }
 
+            $catalogue = new MessageCatalogue($culture);
             if ($resource ===  null) {
                 $nodesSql = 'SELECT N.node_name, N.node_type, A.attrib_name, A.attrib_original, NULL AS value_translation FROM translation_node N INNER JOIN translation_attribute A ON N.node_id = A.attrib_node';
                 $nodesStmt = $this->doctrine->getManager()->getConnection()->prepare($nodesSql);
