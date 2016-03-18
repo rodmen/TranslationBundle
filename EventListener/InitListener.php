@@ -8,6 +8,8 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\EventDispatcher\Event;
 
 class InitListener
 {
@@ -23,7 +25,7 @@ class InitListener
         $translator->addLoader('array', new ArrayLoader());
     }
 
-    public function onRequest(GetResponseEvent $event)
+    public function initialize(Event $event)
     {
         $resourcesEvent = new ResourcesEvent();
         $this->eventDispatcher->dispatch(ResourceEvent::EVENT_LOAD, $resourcesEvent);
