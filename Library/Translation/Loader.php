@@ -14,13 +14,15 @@ class Loader
     protected $doctrine;
     protected $logger;
     protected $debug;
+    protected $cache;
 
-    public function __construct($cacheDir, $doctrine, $logger, $debug = false)
+    public function __construct($cacheDir, $doctrine, $logger, $debug = false, $cache = true)
     {
         $this->cacheDir = $cacheDir;
         $this->doctrine = $doctrine;
         $this->logger = $logger;
         $this->debug = $debug;
+        $this->cache = $cache;
     }
 
     public function load($resource = null, $culture = null, $version = 0)
@@ -28,7 +30,7 @@ class Loader
         $resourceName = ($resource === null) ? 'Global * Debug' : ($resource . '/' . $culture);
         $cacheFile = $this->cacheDir . '/translations/resource-' . ($resource === null ? 'global' : $resource) . '-' . $culture . '-v' . $version . '.php';
 
-        if (!file_exists($cacheFile) || ((filemtime($cacheFile) + (self::TTL * 3600)) < time())) {
+        if (! $this->cache || !file_exists($cacheFile) || ((filemtime($cacheFile) + (self::TTL * 3600)) < time())) {
             try {
                 // Delete Symfony Catalogue
                 $fs = new Filesystem();

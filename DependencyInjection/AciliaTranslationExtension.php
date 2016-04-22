@@ -22,6 +22,11 @@ class AciliaTranslationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        // Set cache translations
+        if (!$container->hasParameter('acilia.translation.cache')) {
+            $container->setParameter('acilia.translation.cache', true);
+        }
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
