@@ -62,7 +62,9 @@ class Loader
                     $catalogue->set($id, $value, $type);
                 } else {
                     if ($resource !=  null) {
-                        $this->logger->warning('Translation for key "' . $id . '" and region "' . $resourceName . '" not found!');
+                        if ($this->debug) {
+                            $this->logger->warning('Translation for key "' . $id . '" and region "' . $resourceName . '" not found!');
+                        }
                     }
 
                     if ($this->debug) {
