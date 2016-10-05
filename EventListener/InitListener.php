@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\Event;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 
 class InitListener
 {
@@ -30,22 +31,24 @@ class InitListener
         $resourcesEvent = new ResourcesEvent();
         $this->eventDispatcher->dispatch(ResourceEvent::EVENT_LOAD, $resourcesEvent);
 
-        // initialize default translation
-        $catalog = $this->loader->load(null, 'en', 0);
-        $this->translator->setFallbackLocales([]);
-        foreach ($catalog->getDomains() as $domain) {
-            $this->translator->addResource('array', $catalog->all($domain), $catalog->getLocale(), $domain);
-        }
+        try {
+            // initialize default translation
+            $catalog = $this->loader->load(null, 'en', 0);
+            $this->translator->setFallbackLocales([]);
+            foreach ($catalog->getDomains() as $domain) {
+                $this->translator->addResource('array', $catalog->all($domain), $catalog->getLocale(), $domain);
+            }
 
-        // Init each locale
-        $this->translator->setFallbackLocales(['en']);
-        if (count($resourcesEvent) > 0) {
-            foreach($resourcesEvent->getResources() as $resourceEvent) {
-                $catalog = $this->loader->load($resourceEvent->getResource(), $resourceEvent->getCulture(), $resourceEvent->getVersion());
-                foreach ($catalog->getDomains() as $domain) {
-                    $this->translator->addResource('array', $catalog->all($domain), $catalog->getLocale(), $domain);
+            // Init each locale
+            $this->translator->setFallbackLocales(['en']);
+            if (count($resourcesEvent) > 0) {
+                foreach($resourcesEvent->getResources() as $resourceEvent) {
+                    $catalog = $this->loader->load($resourceEvent->getResource(), $resourceEvent->getCulture(), $resourceEvent->getVersion());
+                    foreach ($catalog->getDomains() as $domain) {
+                        $this->translator->addResource('array', $catalog->all($domain), $catalog->getLocale(), $domain);
+                    }
                 }
             }
-        }
+        } catch (TableNotFoundException $e) {}
     }
 }
